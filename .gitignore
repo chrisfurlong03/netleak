@@ -1,0 +1,16 @@
+# Raw datasets and derived feature caches are large and reproducible: never commit.
+data/
+cache/
+
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+AutogluonModels/
+
+# OS / editor
+.DS_Store
+.vscode/

@@ -1,0 +1,17 @@
+dataset,split,rung,logreg,rf,lgbm
+os_detection,block,R0,,1.0,
+os_detection,block,R1,,0.767,
+os_detection,block,R3,,0.688,
+os_detection,random,R1,,0.774,
+video_services,block,R0,0.875,0.908,0.915
+video_services,block,R1,0.691,0.752,0.752
+video_services,block,R2,0.703,0.73,0.731
+video_services,block,R3,0.564,0.727,0.73
+video_services,grouped,R0,0.578,0.52,0.564
+video_services,grouped,R1,0.513,0.42,0.455
+video_services,grouped,R2,0.47,0.425,0.501
+video_services,grouped,R3,0.648,0.436,0.438
+video_services,random,R0,0.878,0.913,0.915
+video_services,random,R1,0.694,0.749,0.76
+video_services,random,R2,0.705,0.73,0.737
+video_services,random,R3,0.55,0.734,0.738

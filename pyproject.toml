@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netleak"
+version = "0.1.0"
+description = "Feature-leakage audit harness for nPrint/pcapML traffic-classification benchmarks"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [{ name = "Chris Furlong" }, { name = "Winston Li" }]
+dependencies = [
+    "pcapml==0.1.0",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "pyarrow>=15",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.3",
+    "matplotlib>=3.8",
+    "typer>=0.12",
+    "gdown>=5.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "scapy>=2.5", "ipykernel>=6", "nbconvert>=7"]
+automl = ["autogluon.tabular>=1.1"]
+
+[project.scripts]
+netleak = "netleak.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning:scapy.*"]
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

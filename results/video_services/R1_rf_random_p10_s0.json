@@ -1,0 +1,59 @@
+{
+  "dataset": "video_services",
+  "rung": "R1",
+  "model": "rf",
+  "split": "random",
+  "seed": 0,
+  "max_packets": 10,
+  "max_samples": null,
+  "n_train": 16707,
+  "n_test": 4177,
+  "n_features": 2697,
+  "balanced_accuracy": 0.7494310627187983,
+  "macro_f1": 0.7219614517419004,
+  "chance_balanced_accuracy": 0.25,
+  "leaderboard_balanced_accuracy": 0.779,
+  "labels": [
+    "amazon",
+    "netflix",
+    "twitch",
+    "youtube"
+  ],
+  "confusion_matrix": [
+    [
+      313,
+      10,
+      22,
+      29
+    ],
+    [
+      73,
+      814,
+      93,
+      271
+    ],
+    [
+      65,
+      81,
+      502,
+      22
+    ],
+    [
+      102,
+      332,
+      16,
+      1432
+    ]
+  ],
+  "extract_seconds_per_sample": 0.0006651328714462866,
+  "select_seconds": 0.12209112499840558,
+  "fit_seconds": 2.835640167002566,
+  "predict_seconds": 0.1152572919963859,
+  "rung_version": "792434a48421",
+  "encoder_version": "1",
+  "git_sha": "unknown",
+  "timestamp": "2026-09-16T00:01:10",
+  "notes": {
+    "test_classes_missing": []
+  }
+}
