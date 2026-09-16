@@ -124,8 +124,9 @@ benchmark-legal features (R1-equivalent).
 | block | 100.0% | 76.7% | – | 68.8% |
 | random | – | 77.4% | – | – |
 
-The full OS grid (logistic regression and LightGBM, all rungs) takes about 4–5 hours on an M1
-Pro and has not been run yet: `netleak grid -d os_detection`.
+The full OS grid (logistic regression and LightGBM, all rungs) has not been run yet:
+`netleak grid -d os_detection`. Measured cost on an M1 Pro is about 2.5 hours, dominated by
+LightGBM (~17 min per cell at R1, ~23 min at R0; 13 classes x 400 trees over 42-56k columns).
 
 What the numbers so far show:
 

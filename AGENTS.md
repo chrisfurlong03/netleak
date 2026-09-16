@@ -100,10 +100,13 @@ fitted = runner.fit_one(spec, "R2", "rf", "block")        # same, but returns th
   columns R0/R1/R2 keep 56,290 / 41,690 / 36,890 columns (~2.2 GB float32 at fit time); video
   keeps 4,297 / 2,697 / 2,409. Use `--max-samples` or `--max-packets` if memory is tight, and
   say so in results.
-- **Runtime:** video's whole grid takes ~20 min on an M1 Pro. The full OS grid takes **~4-5 h**,
-  mostly LightGBM (~35 min per cell at R0: 13 classes × 400 trees over 56k columns) and logistic
-  regression (~10 min per cell). To iterate, use `--model rf` (minutes) or `--max-samples`. The
-  run is resumable: finished cells are skipped.
+- **Runtime:** video's whole grid takes ~20 min on an M1 Pro; the full OS grid takes **~2.5 h**
+  (measured on an M1 Pro): LightGBM ~17 min per cell at R1 and ~23 min at R0 (13 classes x 400
+  trees over 42-56k columns), logistic regression <=5 min, random forest ~10 s. Slicing the
+  matrix costs 2.2 s and the float32 cast 0.3 s, so fitting dominates. To iterate, use
+  `--model rf` or `--max-packets`. The run is resumable: finished cells are skipped.
+- **logreg does not converge** on the OS matrix: it stops at the 1,000-iteration cap, so its
+  numbers are "1,000 lbfgs iterations", not a converged fit. Say so when quoting them.
 - **Reading logreg results:** standardising {-1, 0, 1} bits turns rare bits (e.g. one host's
   address) into large values. Under a grouped split, logistic regression can latch onto those
   bits and fall below chance. The port canary in `tests/test_experiments.py` fails with logreg
