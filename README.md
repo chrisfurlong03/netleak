@@ -158,6 +158,10 @@ data/, cache/   downloaded pcapML files and feature caches (gitignored)
 
 ## Working on the code
 
+For contemporary video traffic, see the [fresh capture pilot guide](docs/fresh-captures.md).
+`netleak capture` records timed sessions and protocol summaries locally; raw pilot captures
+still require service attribution before they become evaluation samples.
+
 [AGENTS.md](AGENTS.md) is the contributor guide, for people and coding agents alike. It covers
 the commands, the invariants that keep results comparable, the recipes for adding a dataset,
 model, rung or figure, and who owns what.

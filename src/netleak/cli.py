@@ -147,6 +147,32 @@ def figures(root: Root = None) -> None:
         typer.echo(path)
 
 
+@app.command("capture")
+def capture_session(
+    label: Annotated[str, typer.Option(help="Intended service, e.g. youtube; not a packet label.")],
+    interface: Annotated[str, typer.Option(help="Capture interface from dumpcap -D, e.g. en0.")],
+    seconds: Annotated[int, typer.Option(min=1, max=600)] = 120,
+    content_url: str = "",
+    notes: str = "",
+    condition: Annotated[str, typer.Option(help="Capture condition, e.g. natural or ipv4_tcp.")] = "natural",
+    root: Root = None,
+) -> None:
+    """Record a timed pilot into data/fresh_video/ and summarize protocol coverage."""
+    from .capture import record_session
+
+    typer.echo(
+        record_session(
+            _paths(root).data / "fresh_video",
+            label=label,
+            interface=interface,
+            seconds=seconds,
+            content_url=content_url,
+            notes=notes,
+            condition=condition,
+        )
+    )
+
+
 @app.command()
 def smoke(root: Root = None) -> None:
     """End-to-end check on a synthetic dataset in a temp dir; no downloads."""
