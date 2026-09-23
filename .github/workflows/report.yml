@@ -40,9 +40,8 @@ jobs:
         run: |
           sphinx-build -b html -d report/_build/doctrees report report/_build/html
           touch report/_build/html/.nojekyll
+      # Requires Pages to be enabled once: Settings -> Pages -> Source: GitHub Actions.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: report/_build/html
