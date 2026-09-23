@@ -21,8 +21,12 @@ Three results, stated plainly:
    on both tasks.
 2. On streaming video, *how the test set is chosen* matters more than *which features are removed*.
    Holding out whole client hosts costs roughly twice what the feature restriction does.
-3. Twelve hand-picked header features match thousands of nPrint bits on the video task, at a small
-   fraction of the training cost.
+3. Twelve hand-picked header features match thousands of nPrint bits on the video task and *beat*
+   them on OS detection, at a small fraction of the training cost.
+4. Fields the benchmark explicitly permits still carry host identity. On OS detection the
+   benchmark-legal rung leans mostly on genuine stack behaviour — TTL, window size, TCP options —
+   but the IP ID counter and the IPv4 checksum still contribute 13 points between them, and a
+   checksum is a function of the very addresses the benchmark forbids.
 
 ```{include} _generated/coverage.md
 ```

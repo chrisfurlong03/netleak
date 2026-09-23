@@ -39,5 +39,25 @@ training hosts that only ever served Netflix and YouTube, and the predictions fo
 ```
 
 R0 reaching a perfect score is the dataset speaking, not the model: with one host per class, the
-source address alone determines the label. The informative comparison is R1 against the published
-77.1%, and the descent from R1 to R3.
+source address alone determines the label. Logistic regression gets 99.8% there, which says the 13
+classes are nearly linearly separable once the address is visible. The informative comparisons are
+below it.
+
+**The benchmark-legal rung is not a weakened one.** LightGBM reaches 80.7% at R1, above the
+published 77.1%. Our split implementation, feature pipeline and model differ from the benchmark's,
+so this is not a matched reproduction and we do not claim to beat it — but it does mean that what
+follows is measured against a strong R1, not a handicapped one.
+
+**Removing the fields the benchmark still permits costs 14 points.** R1 to R2 drops LightGBM from
+80.7% to 66.5% and random forest from 76.7% to 63.1%. On the video task the same step costs about
+two points. Whatever the disallowed list was designed to catch, it leaves substantially more
+host-linked signal on OS detection than on video — see [](signal.md) for which fields, and
+[](limitations.md) for why the OS case is not purely leakage.
+
+**Twelve summary features beat 36,890 behaviour-only bits.** R3 reaches 69.7% against R2's 66.5%.
+A representation three thousand times smaller is *more* accurate here, which is hard to reconcile
+with the idea that the value of packet-level features lies in their breadth.
+
+**The block split matches the random split** to within 1.5 points at every rung, so contiguity
+between neighbouring samples is not inflating these numbers. Host grouping, the control that did
+matter on video, cannot be run here at all.

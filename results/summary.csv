@@ -1,8 +1,12 @@
 dataset,split,rung,logreg,rf,lgbm
-os_detection,block,R0,,1.0,
-os_detection,block,R1,,0.767,
-os_detection,block,R3,,0.688,
-os_detection,random,R1,,0.774,
+os_detection,block,R0,0.998,1.0,1.0
+os_detection,block,R1,0.669,0.767,0.807
+os_detection,block,R2,0.574,0.631,0.665
+os_detection,block,R3,0.566,0.688,0.697
+os_detection,random,R0,0.998,1.0,1.0
+os_detection,random,R1,0.679,0.774,0.799
+os_detection,random,R2,0.582,0.632,0.651
+os_detection,random,R3,0.567,0.704,0.688
 video_services,block,R0,0.875,0.908,0.915
 video_services,block,R1,0.691,0.752,0.752
 video_services,block,R2,0.703,0.73,0.731

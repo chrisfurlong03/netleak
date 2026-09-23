@@ -21,6 +21,14 @@ of drift over time.
 cannot be asked of this benchmark at all. That limits the central claim: the two-task comparison
 holds for feature restriction, but the split axis could only be measured on the video task.
 
+**On OS detection, R2 removes fields that are identifying *and* behavioural.** IP ID generation and
+TCP timestamp clock behaviour are classic OS-fingerprinting signals — the same ones tools like p0f
+use — and they are also host-linked. So the 14-point R1-to-R2 drop on this task cannot be read as
+"14 points of leakage removed"; part of it is real OS signal removed along with the identifiers.
+The checksum component is unambiguous leakage, and the video task, where the same step costs about
+two points, is the cleaner measurement. R2 is the right rung for asking *what survives without
+host-linked fields*; it is not a measurement of what an OS classifier legitimately knows.
+
 **Permutation importance shows redundancy, not causation.** See the caveat in
 [](signal.md).
 

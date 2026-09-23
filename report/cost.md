@@ -9,8 +9,8 @@ how many columns each rung produces, and how long a model takes to fit them.
 ![Training time against rung, log scale](_generated/figures/cost.png)
 
 The striking entry is R3. Twelve summary features match all 2,409 R2 bits on the video task —
-73.8% against 73.7% for LightGBM on a random split — and come within about eight points of the full
-benchmark-legal representation on OS detection, while training in well under a second.
+73.8% against 73.7% for LightGBM on a random split — and on OS detection they *beat* the 36,890
+behaviour-only bits of R2, 69.7% against 66.5%, while fitting in 47 seconds instead of 570.
 
 Cost scales with the representation, not with the difficulty of the task. An OS sample is 100
 packets rather than 10, so R1 carries 41,690 columns against the video task's 2,697, and the 13-class

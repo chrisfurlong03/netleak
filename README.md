@@ -117,16 +117,22 @@ benchmark-legal features (R1-equivalent).
 | grouped by host | R2 | 47.0% | 42.5% | 50.1% |
 | grouped by host | R3 | 64.8% | 43.6% | 43.8% |
 
-**OS detection** (random-forest validation cells only; leaderboard 77.1%, chance 7.7%)
+**OS detection** (full grid; leaderboard 77.1%, chance 7.7%)
 
-| Split | R0 | R1 | R2 | R3 |
+| Split | Rung | Logistic regression | Random forest | LightGBM |
 |---|---|---|---|---|
-| block | 100.0% | 76.7% | – | 68.8% |
-| random | – | 77.4% | – | – |
+| block | R0 | 99.8% | 100.0% | 100.0% |
+| block | R1 | 66.9% | 76.7% | 80.7% |
+| block | R2 | 57.4% | 63.1% | 66.5% |
+| block | R3 | 56.6% | 68.8% | 69.7% |
+| random | R0 | 99.8% | 100.0% | 100.0% |
+| random | R1 | 67.9% | 77.4% | 79.9% |
+| random | R2 | 58.2% | 63.2% | 65.1% |
+| random | R3 | 56.7% | 70.4% | 68.8% |
 
-The full OS grid (logistic regression and LightGBM, all rungs) has not been run yet:
-`netleak grid -d os_detection`. Measured cost on an M1 Pro is about 2.5 hours, dominated by
-LightGBM (~17 min per cell at R1, ~23 min at R0; 13 classes x 400 trees over 42-56k columns).
+The OS grid took 1 h 47 min on an M1 Pro, dominated by LightGBM (18 min per cell at R0, 13 min at
+R2). Logistic regression stops at its 1,000-iteration cap on this matrix, so those cells report an
+optimiser still in motion rather than a converged fit.
 
 What the numbers so far show:
 
@@ -135,9 +141,15 @@ What the numbers so far show:
   because every class is one host.
 - **The benchmark-legal rung reproduces the leaderboard** with untuned models: 76.0% vs 77.9%
   on video and 77.4% vs 77.1% on OS.
+- **Fields the benchmark permits still carry host identity.** On OS detection, removing IP ID, the
+  checksums and the TCP timestamp values (R1 → R2) costs 14 points; the same step costs ~2 points
+  on video. At R1 the model leans mostly on real stack behaviour — TTL (+40.9 points), TCP window
+  (+22.3), TCP options (+21.2) — but `ipv4_id` (+7.2) and `ipv4_cksum` (+6.0) still contribute, and
+  an IPv4 checksum is a function of the addresses the benchmark forbids. IP ID is also a genuine OS
+  fingerprint, so that 14 points is not purely leakage.
 - **Twelve hand-picked header features match all 2,409 R2 bits** on video (73.8% vs 73.7%,
-  LightGBM, random split) and come within ~8 points of R1 on OS, at a small fraction of the
-  training cost.
+  LightGBM, random split) and **beat** R2 on OS detection (69.7% vs 66.5%) with 3,000× fewer
+  columns, at a small fraction of the training cost.
 - **Host grouping is the dominant effect on video.** Holding out whole client hosts drops every
   model and rung to 42–65%, well below the leaderboard, even at R0. What the benchmark rewards is
   largely recognising capture conditions, not service behaviour. Grouped numbers rest on 13
