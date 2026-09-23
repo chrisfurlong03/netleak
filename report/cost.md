@@ -21,3 +21,20 @@ Most of those columns carry very little. A 100-packet sample is 96,000 bit-colum
 them near-constant option and padding bits that survive the constant-column filter and then consume
 full histogram and gradient cost. For any deployment where inference or retraining cost matters,
 the twelve-feature baseline is the honest comparison point.
+
+## Were 100 packets ever necessary?
+
+The OS benchmark defines a sample as 100 packets. Re-running the whole grid at 20 packets tests
+whether that length earns its cost.
+
+```{include} _generated/ablation.md
+```
+
+At the benchmark-legal rung, four fifths of the packets can go for **less than one point** of
+balanced accuracy, with five times fewer columns and a fit that takes 210 seconds instead of 800.
+The shorter sample costs more at R2 and R3, where the surviving signal is thinner and the per-sample
+summaries get noisier — so packet count matters most exactly where the representation is weakest.
+
+This is an ablation, not part of the headline grid: `plots.primary_runs` keeps these runs out of
+every reported table and figure, and they are stored alongside the main results under their own
+`p20` run identifiers.

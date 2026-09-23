@@ -41,7 +41,7 @@ figures:
 report:
 	$(BIN)/pip install -q -e ".[report]"
 	$(BIN)/python report/make_tables.py
-	$(BIN)/sphinx-build -q -b html report report/_build/html
+	$(BIN)/sphinx-build -q -b html -d report/_build/doctrees report report/_build/html
 	@echo "report/_build/html/index.html"
 
 clean-cache:

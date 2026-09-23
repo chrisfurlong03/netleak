@@ -86,6 +86,40 @@ def importance_table(dataset: str, top: int = 6) -> str:
     return "\n".join(lines) + "\n"
 
 
+def packet_ablation_table(all_runs: pd.DataFrame, dataset: str = "os_detection") -> str:
+    """Compare the benchmark's packet count against a shorter sample, where both were run."""
+    sub = all_runs[(all_runs["dataset"] == dataset) & all_runs["max_samples"].isna()]
+    counts = sorted(sub["max_packets"].unique())
+    if len(counts) < 2:
+        return "_No packet-count ablation has been run._\n"
+    full, short = max(counts), min(counts)
+    lines = [
+        f"LightGBM, {REGISTRY[dataset].title.split(' (')[0]}, contiguous block split.",
+        "",
+        f"| Representation | {full} packets | {short} packets | Difference | Columns {full} → {short} |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for rung in RUNG_LABELS:
+        cells = {
+            n: sub[
+                (sub["max_packets"] == n)
+                & (sub["rung"] == rung)
+                & (sub["model"] == "lgbm")
+                & (sub["split"] == "block")
+            ]
+            for n in (full, short)
+        }
+        if any(c.empty for c in cells.values()):
+            continue
+        a, b = (cells[n].iloc[0] for n in (full, short))
+        lines.append(
+            f"| {RUNG_LABELS[rung]} | {_pct(a['balanced_accuracy'])} | {_pct(b['balanced_accuracy'])} "
+            f"| {100 * (b['balanced_accuracy'] - a['balanced_accuracy']):+.1f} pts "
+            f"| {a['n_features']:,} → {b['n_features']:,} |"
+        )
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     out = REPORT / "_generated"
     out.mkdir(exist_ok=True)
@@ -96,6 +130,7 @@ def main() -> None:
         (out / f"scores_{dataset}.md").write_text(score_table(df, dataset))
         (out / f"importance_{dataset}.md").write_text(importance_table(dataset))
     (out / "cost.md").write_text(cost_table(df))
+    (out / "ablation.md").write_text(packet_ablation_table(results_io.load_all(ROOT / "results")))
     figures = out / "figures"
     shutil.rmtree(figures, ignore_errors=True)
     shutil.copytree(ROOT / "results" / "figures", figures)
