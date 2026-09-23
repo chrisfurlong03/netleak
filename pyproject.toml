@@ -24,6 +24,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.5", "scapy>=2.5", "ipykernel>=6", "nbconvert>=7"]
 automl = ["autogluon.tabular>=1.1"]
+report = ["sphinx>=7", "myst-nb>=1.1", "furo>=2024.1"]
 
 [project.scripts]
 netleak = "netleak.cli:app"

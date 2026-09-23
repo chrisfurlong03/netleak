@@ -83,6 +83,16 @@ def _datasets(df: pd.DataFrame) -> list[str]:
     return [name for name in REGISTRY if name in set(df["dataset"])]
 
 
+def primary_runs(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep each dataset's headline configuration: benchmark packet count, no subsample.
+
+    Ablations (`--max-packets`, `--max-samples`) stay in results/ but must never be averaged
+    into the headline table or figures, which aggregate over dataset/split/rung only.
+    """
+    expected = df["dataset"].map(lambda name: REGISTRY[name].max_packets if name in REGISTRY else None)
+    return df[(df["max_packets"] == expected) & df["max_samples"].isna()]
+
+
 def _model_lines(ax, sub: pd.DataFrame, y: str) -> None:
     x = np.arange(len(RUNG_ORDER))
     for model, color in MODEL_COLORS.items():
@@ -240,7 +250,7 @@ def summary_table(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def all_figures(paths: Paths) -> list[Path]:
-    df = results_io.load_all(paths.results)
+    df = primary_runs(results_io.load_all(paths.results))
     if df.empty:
         raise FileNotFoundError(f"no results under {paths.results}; run `netleak grid` first")
     paths.figures.mkdir(parents=True, exist_ok=True)

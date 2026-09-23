@@ -14,3 +14,7 @@ AutogluonModels/
 # OS / editor
 .DS_Store
 .vscode/
+
+# Sphinx report build artefacts (regenerate with `make report`)
+report/_build/
+report/_generated/

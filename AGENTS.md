@@ -36,6 +36,7 @@ netleak features   -d video_services          # cache/<dataset>/p<packets>/ (~15
 netleak run        -d video_services --rung R1 --model lgbm --split grouped
 netleak grid       -d video_services          # all rungs × default models × dataset splits
 netleak importance -d video_services --rung R1 --model lgbm
+netleak capture    --label youtube --interface en0   # fresh pilot capture (see docs/fresh-captures.md)
 netleak figures                               # results/figures/*.png + results/summary.csv
 make all                                      # everything, both datasets
 ```
@@ -65,6 +66,7 @@ fitted = runner.fit_one(spec, "R2", "rf", "block")        # same, but returns th
 | `runner.py` | `fit_one`, `run_one`, `grid`, `importance`, `smoke` |
 | `importance.py` | Permutation importance grouped by header field |
 | `plots.py` | Figures and `summary.csv`, read only from `results/` |
+| `capture.py` | Records one fresh traffic session via dumpcap/tshark; writes a session manifest. Not a labelled benchmark sample: see `docs/fresh-captures.md` |
 | `synthetic.py` | Synthetic pcapML writer (behaviour dataset and port-leak canary) |
 | `cli.py` | `netleak` Typer app; no logic of its own |
 
@@ -115,6 +117,16 @@ fitted = runner.fit_one(spec, "R2", "rf", "block")        # same, but returns th
 - **Reading importance:** fields that carry the same information mask each other in
   permutation importance, so a near-zero score means "redundant given the others", not
   "uninformative". On the synthetic data, TTL scores 0 even though it identifies the class.
+
+## Known follow-ups
+
+- **`notebooks/02_video_services.ipynb` carries a 7.8 MB base64 copy of `src/` in its metadata**
+  and does `sys.path.insert(0, <bundle>/src)`, so it runs that frozen copy rather than the repo.
+  Editing `rungs.py` does not change what that notebook reports, and its version assertions still
+  pass because they compare the bundle against itself. Each saved revision adds ~10 MB to git
+  history. Winston owns the notebook; agree a fix before the report is graded.
+- **Ablations must not reach the headline outputs.** `plots.primary_runs` keeps only each
+  dataset's benchmark packet count with no subsample; keep new aggregations behind it.
 
 ## Recipes
 

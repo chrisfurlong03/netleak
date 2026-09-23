@@ -5,7 +5,7 @@ PY ?= python3.11
 BIN := .venv/bin
 DATASETS := os_detection video_services
 
-.PHONY: all setup test lint smoke data features grid importance figures clean-cache
+.PHONY: all setup test lint smoke data features grid importance figures report clean-cache
 
 all: setup test grid importance figures
 
@@ -37,6 +37,12 @@ importance: features
 
 figures:
 	$(BIN)/netleak figures
+
+report:
+	$(BIN)/pip install -q -e ".[report]"
+	$(BIN)/python report/make_tables.py
+	$(BIN)/sphinx-build -q -b html report report/_build/html
+	@echo "report/_build/html/index.html"
 
 clean-cache:
 	rm -rf cache/
